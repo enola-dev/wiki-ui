@@ -7,16 +7,14 @@ describe("wiki-ui bundle", () => {
   const wikiJsPath = join(distDir, "wiki.js");
   const wikiCssPath = join(distDir, "wiki.css");
 
-  test("dist/wiki.js exists and is an IIFE (CORS/file:// compatible)", () => {
+  test("dist/wiki.js exists and is an ES module", () => {
     expect(existsSync(wikiJsPath)).toBe(true);
     const content = readFileSync(wikiJsPath, "utf-8");
     expect(content.length).toBeGreaterThan(1000);
-    // Must be bundled as IIFE (self-invoking function) without ES module import/export
-    expect(content.startsWith("(()=>") || content.startsWith("(function")).toBe(true);
-    expect(content.endsWith(")();\n") || content.endsWith(")();")).toBe(true);
     expect(content).toContain("highlightAll");
     expect(content).toContain("mermaid");
     expect(content).toContain(".mermaid");
+    expect(content).toContain("export");
   });
 
   test("dist/wiki.css exists and contains wiki and highlight.js styles", () => {

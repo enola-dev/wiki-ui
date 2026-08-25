@@ -122,6 +122,17 @@ pre.mermaid {
   padding: 1rem 0;
 }
 
+.mermaid-file-warning {
+  padding: 0.75rem 1rem;
+  background-color: #fff8c5;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  color: #57606a;
+  font-size: 0.875rem;
+  text-align: center;
+  margin: 1rem 0;
+}
+
 /* Task Lists */
 li:has(> input[type="checkbox"]),
 .task-list-item {

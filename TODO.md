@@ -1,5 +1,7 @@
 # ToDo
 
+- [ ] Package as an embeddable HTML Web Component (e.g. `<wiki ...>`) and modern ES module for embedding by other web apps
+
 - [ ] Support Edit in itself (in addition to Edit on GitHub URL)
 
 - [ ] Add a `wiki.api.yaml` OpenAPI
