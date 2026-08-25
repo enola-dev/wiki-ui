@@ -41,3 +41,87 @@ describe("wiki-ui bundle", () => {
     expect(content).toContain(".hljs");
   });
 });
+
+describe("wiki-ui demo fixtures", () => {
+  const demoDir = join(import.meta.dir, "../demo");
+
+  test("demo/index.html exists and contains fixture elements", () => {
+    const indexPath = join(demoDir, "index.html");
+    expect(existsSync(indexPath)).toBe(true);
+    const content = readFileSync(indexPath, "utf-8");
+    expect(content).toContain('class="header-actions"');
+    expect(content).toContain('class="breadcrumbs"');
+    expect(content).toContain('class="mermaid"');
+    expect(content).toContain('class="language-typescript"');
+  });
+
+  test("demo/no-mermaid.html exists and excludes mermaid elements", () => {
+    const noMermaidPath = join(demoDir, "no-mermaid.html");
+    expect(existsSync(noMermaidPath)).toBe(true);
+    const content = readFileSync(noMermaidPath, "utf-8");
+    expect(content).toContain('class="header-actions"');
+    expect(content).toContain('class="breadcrumbs"');
+    expect(content).not.toContain('class="mermaid"');
+    expect(content).toContain('class="language-typescript"');
+  });
+});
+
+describe("wiki-ui demo server", () => {
+  test("serves dev mode endpoints", async () => {
+    const { createDemoServer } = await import("../demo/server");
+    const server = createDemoServer({ port: 0, isPreview: false });
+    const baseUrl = `http://localhost:${server.port}`;
+
+    try {
+      const indexRes = await fetch(`${baseUrl}/`);
+      expect(indexRes.status).toBe(200);
+      expect(indexRes.headers.get("content-type")).toContain("text/html");
+      const indexText = await indexRes.text();
+      expect(indexText).toContain("Wiki UI Demo");
+
+      const noMermaidRes = await fetch(`${baseUrl}/no-mermaid`);
+      expect(noMermaidRes.status).toBe(200);
+      const noMermaidText = await noMermaidRes.text();
+      expect(noMermaidText).toContain("Without Mermaid");
+
+      const cssRes = await fetch(`${baseUrl}/wiki.css`);
+      expect(cssRes.status).toBe(200);
+      expect(cssRes.headers.get("content-type")).toContain("text/css");
+
+      const jsRes = await fetch(`${baseUrl}/wiki.js`);
+      expect(jsRes.status).toBe(200);
+      expect(jsRes.headers.get("content-type")).toContain("application/javascript");
+
+      const mermaidRes = await fetch(`${baseUrl}/mermaid.js`);
+      expect(mermaidRes.status).toBe(200);
+      expect(mermaidRes.headers.get("content-type")).toContain("application/javascript");
+    } finally {
+      server.stop(true);
+    }
+  });
+
+  test("serves preview mode endpoints from dist/", async () => {
+    const { createDemoServer } = await import("../demo/server");
+    const server = createDemoServer({ port: 0, isPreview: true });
+    const baseUrl = `http://localhost:${server.port}`;
+
+    try {
+      const indexRes = await fetch(`${baseUrl}/`);
+      expect(indexRes.status).toBe(200);
+
+      const cssRes = await fetch(`${baseUrl}/wiki.css`);
+      expect(cssRes.status).toBe(200);
+      expect(cssRes.headers.get("content-type")).toContain("text/css");
+
+      const jsRes = await fetch(`${baseUrl}/wiki.js`);
+      expect(jsRes.status).toBe(200);
+      expect(jsRes.headers.get("content-type")).toContain("application/javascript");
+
+      const mermaidRes = await fetch(`${baseUrl}/mermaid.js`);
+      expect(mermaidRes.status).toBe(200);
+      expect(mermaidRes.headers.get("content-type")).toContain("application/javascript");
+    } finally {
+      server.stop(true);
+    }
+  });
+});

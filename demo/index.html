@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wiki UI Demo (with Mermaid)</title>
+  <link rel="alternate" type="text/markdown" href="index.md">
+  <link rel="stylesheet" href="/wiki.css">
+  <script type="module" src="/wiki.js"></script>
+  <script>
+    if (location.protocol === 'file:') {
+      window.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('pre.mermaid').forEach(el => {
+          const msg = document.createElement('p');
+          msg.className = 'mermaid-file-warning';
+          msg.textContent = 'Please serve this page over HTTP instead of file://';
+          el.replaceWith(msg);
+        });
+      });
+    }
+  </script>
+</head>
+<body>
+  <div class="header-actions">
+    <a class="action-button md-button" href="index.md">Markdown</a>
+    <a class="action-button edit-button" href="https://github.com/enola-dev/wiki-ui" target="_blank">Edit</a>
+  </div>
+
+  <nav class="breadcrumbs">
+    <a href="/">Home</a><span class="breadcrumb-separator">/</span><a href="/demo">Demo</a><span class="breadcrumb-separator">/</span><span>Index with Mermaid</span>
+  </nav>
+
+  <h1 id="wiki-ui-demo">Wiki UI Demo</h1>
+  <p>
+    This is an interactive fixture showcasing <strong>Wiki UI</strong> assets (CSS, syntax highlighting, and lazy-loaded Mermaid diagrams) matching Enola's <code>md2html</code> generation.
+  </p>
+
+  <p>
+    👉 <a href="/no-mermaid.html">View demo page without Mermaid</a> (to verify in DevTools Network tab that <code>mermaid.js</code> is not loaded).
+  </p>
+
+  <h2 id="syntax-highlighting">1. Syntax Highlighting</h2>
+  <p>Syntax highlighting powered by <code>highlight.js</code>:</p>
+
+  <pre><code class="language-typescript">import hljs from 'highlight.js';
+
+export async function init(): Promise&lt;void&gt; {
+  hljs.highlightAll();
+
+  if (typeof document !== 'undefined' &amp;&amp; document.querySelector('pre.mermaid')) {
+    const { renderMermaid } = await import(String('./mermaid.js'));
+    await renderMermaid().catch(console.error);
+  }
+}
+</code></pre>
+
+  <pre><code class="language-java">package dev.enola.wiki;
+
+public final class WikiGenerator {
+    public static void main(String[] args) {
+        System.out.println("Enola Knowledge Base HTML Generation");
+    }
+}
+</code></pre>
+
+  <h2 id="mermaid-diagrams">2. Mermaid Diagrams (Lazy Loaded)</h2>
+  <p>When <code>&lt;pre class="mermaid"&gt;</code> is present, <code>mermaid.js</code> is dynamically imported:</p>
+
+  <pre class="mermaid">graph TD
+  A[Enola Markdown Docs] -->|md2html| B(Generated HTML)
+  B --> C[wiki.css]
+  B --> D[wiki.js]
+  D -->|Lazy loaded on demand| E[mermaid.js]
+  D -->|Included| F[highlight.js]
+</pre>
+
+  <pre class="mermaid">sequenceDiagram
+  autonumber
+  actor User
+  participant Browser
+  participant WikiJS as wiki.js
+  participant MermaidJS as mermaid.js
+
+  User->>Browser: Opens Wiki Page
+  Browser->>WikiJS: Loads & executes init()
+  WikiJS->>Browser: Runs syntax highlighting
+  alt Has pre.mermaid
+    WikiJS->>MermaidJS: Dynamic import('./mermaid.js')
+    MermaidJS-->>WikiJS: renderMermaid()
+    WikiJS->>Browser: Renders diagrams
+  else No pre.mermaid
+    WikiJS-->>Browser: Idle (no mermaid download)
+  end
+</pre>
+
+  <h2 id="table-and-task-list">3. Tables and Task Lists</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Asset</th>
+        <th>Purpose</th>
+        <th>Loading Strategy</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>wiki.css</code></td>
+        <td>Base typography, GitHub theme & UI styles</td>
+        <td>Static stylesheet (render-blocking)</td>
+      </tr>
+      <tr>
+        <td><code>wiki.js</code></td>
+        <td>Page bootstrap & code highlighting</td>
+        <td>ES module (deferred)</td>
+      </tr>
+      <tr>
+        <td><code>mermaid.js</code></td>
+        <td>Diagram rendering engine</td>
+        <td>Dynamic import (lazy on demand)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <ul>
+    <li class="task-list-item"><input type="checkbox" checked disabled> Live hot reloading with <code>bun run dev</code></li>
+    <li class="task-list-item"><input type="checkbox" checked disabled> Production preview with <code>bun run preview</code></li>
+    <li class="task-list-item"><input type="checkbox" checked disabled> Consolidated build with exactly 3 assets</li>
+  </ul>
+</body>
+</html>

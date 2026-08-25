@@ -4,6 +4,8 @@
   "description": "Wiki UI assets and client-side bundle",
   "module": "dist/wiki.js",
   "scripts": {
+    "dev": "bun --hot demo/server.ts",
+    "preview": "bun run build && bun demo/server.ts --preview",
     "build": "rm -rf dist && bun build src/mermaid.ts --outdir dist --target browser --format esm --minify && bun build src/wiki.ts --outdir dist --target browser --format esm --external './mermaid.js' --external './mermaid' --external 'mermaid' --minify",
     "test": "bun test",
     "check": "bun x tsc --noEmit && bun test"

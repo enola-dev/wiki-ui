@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wiki UI Demo (without Mermaid)</title>
+  <link rel="alternate" type="text/markdown" href="index.md">
+  <link rel="stylesheet" href="/wiki.css">
+  <script type="module" src="/wiki.js"></script>
+</head>
+<body>
+  <div class="header-actions">
+    <a class="action-button md-button" href="index.md">Markdown</a>
+    <a class="action-button edit-button" href="https://github.com/enola-dev/wiki-ui" target="_blank">Edit</a>
+  </div>
+
+  <nav class="breadcrumbs">
+    <a href="/">Home</a><span class="breadcrumb-separator">/</span><a href="/demo">Demo</a><span class="breadcrumb-separator">/</span><span>Page Without Mermaid</span>
+  </nav>
+
+  <h1 id="wiki-ui-demo-no-mermaid">Wiki UI Demo (Without Mermaid)</h1>
+  <p>
+    This page contains no Mermaid diagrams.
+  </p>
+  <p>
+    👉 Inspect the browser's <strong>Network Tab</strong> to verify that only <code>wiki.css</code> and <code>wiki.js</code> are loaded, and <strong><code>mermaid.js</code> is never fetched</strong>.
+  </p>
+  <p>
+    👈 <a href="/index.html">Back to Demo with Mermaid</a>
+  </p>
+
+  <h2 id="syntax-highlighting">Code Highlighting Only</h2>
+  <pre><code class="language-typescript">// Highlight.js runs on this code snippet:
+function computeMetrics(): number[] {
+  return [42, 100, 256];
+}
+</code></pre>
+</body>
+</html>

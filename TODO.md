@@ -1,6 +1,6 @@
 # ToDo
 
-- [ ] To illustrate usage, add an example/index.md etc. their Enola md2html generated example/index.html; notably one with and one without Mermaid
+- [x] To illustrate usage, add an example/index.md etc. their Enola md2html generated example/index.html; notably one with and one without Mermaid (in `demo/`)
 
 - [ ] Package as an embeddable HTML Web Component (e.g. `<wiki ...>`) and modern ES module for embedding by other web apps
 
