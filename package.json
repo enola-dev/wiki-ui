@@ -4,7 +4,9 @@
   "description": "Wiki UI assets and client-side bundle",
   "module": "dist/wiki.js",
   "scripts": {
-    "build": "rm -rf dist && bun build src/wiki.ts --outdir dist --target browser --minify"
+    "build": "rm -rf dist && bun build src/wiki.ts --outdir dist --target browser --format iife --minify",
+    "test": "bun test",
+    "check": "bun x tsc --noEmit && bun test"
   },
   "devDependencies": {
     "bun-types": "latest",
