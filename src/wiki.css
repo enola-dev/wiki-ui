@@ -1,0 +1,147 @@
+body {
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
+    sans-serif;
+  line-height: 1.6;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  color: #1a1a1a;
+}
+
+.breadcrumbs {
+  font-size: 0.875rem;
+  color: #57606a;
+  margin-bottom: 0.75rem;
+}
+
+.breadcrumbs a {
+  color: #0969da;
+  text-decoration: none;
+}
+
+.breadcrumbs a:hover {
+  text-decoration: underline;
+}
+
+.breadcrumb-separator {
+  margin: 0 0.35rem;
+  color: #8c959f;
+  user-select: none;
+}
+
+.header-actions {
+  float: right;
+  display: flex;
+  gap: 0.5rem;
+  margin-left: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.action-button,
+.edit-button,
+.md-button {
+  padding: 0.35rem 0.75rem;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  text-decoration: none;
+  color: #24292f;
+  background-color: #f6f8fa;
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 20px;
+  display: inline-block;
+  transition: background-color 0.2s cubic-bezier(0.3, 0, 0.5, 1);
+}
+
+.action-button:hover,
+.edit-button:hover,
+.md-button:hover {
+  background-color: #f3f4f6;
+  border-color: #1b1f2426;
+  text-decoration: none;
+}
+
+/* Tables */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1.5rem 0;
+  display: block;
+  overflow-x: auto;
+}
+
+th,
+td {
+  border: 1px solid #d0d7de;
+  padding: 6px 13px;
+  text-align: left;
+}
+
+th {
+  background-color: #f6f8fa;
+  font-weight: 600;
+}
+
+tr:nth-child(2n) {
+  background-color: #f6f8fa;
+}
+
+/* Code & Pre */
+code {
+  padding: 0.2em 0.4em;
+  margin: 0;
+  font-size: 85%;
+  background-color: #afb8c133;
+  border-radius: 6px;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+pre {
+  padding: 16px;
+  overflow: auto;
+  font-size: 85%;
+  line-height: 1.45;
+  background-color: #f6f8fa;
+  border-radius: 6px;
+  margin: 1rem 0;
+}
+
+pre code {
+  padding: 0;
+  background-color: transparent;
+  font-size: 100%;
+}
+
+/* Mermaid Diagrams */
+pre.mermaid {
+  display: flex;
+  justify-content: center;
+  background-color: transparent;
+  padding: 1rem 0;
+}
+
+/* Task Lists */
+li:has(> input[type="checkbox"]),
+.task-list-item {
+  list-style-type: none;
+}
+
+li > input[type="checkbox"] {
+  margin: 0 0.35rem 0.25rem -1.4rem;
+  vertical-align: middle;
+}
+
+/* Blockquotes & Images */
+blockquote {
+  margin: 1rem 0;
+  padding: 0 1em;
+  color: #57606a;
+  border-left: 0.25em solid #d0d7de;
+}
+
+img {
+  max-width: 100%;
+  box-sizing: content-box;
+}

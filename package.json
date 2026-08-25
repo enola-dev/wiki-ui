@@ -1,0 +1,17 @@
+{
+  "name": "wiki-ui",
+  "version": "1.0.0",
+  "description": "Wiki UI assets and client-side bundle",
+  "module": "dist/wiki.js",
+  "scripts": {
+    "build": "rm -rf dist && bun build src/wiki.ts --outdir dist --target browser --minify"
+  },
+  "devDependencies": {
+    "bun-types": "latest",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "highlight.js": "^11.11.1",
+    "mermaid": "^11.4.1"
+  }
+}
