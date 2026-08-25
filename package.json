@@ -10,7 +10,7 @@
   },
   "devDependencies": {
     "bun-types": "latest",
-    "typescript": "^5.0.0"
+    "typescript": "^7.0.2"
   },
   "dependencies": {
     "highlight.js": "^11.11.1",
