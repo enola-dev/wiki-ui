@@ -8,9 +8,8 @@ export async function init() {
   hljs.highlightAll();
 
   if (typeof document !== 'undefined' && document.querySelector('pre.mermaid')) {
-    const { default: mermaid } = await import('mermaid');
-    mermaid.initialize({ startOnLoad: false });
-    await mermaid.run({ querySelector: '.mermaid' }).catch(console.error);
+    const { renderMermaid } = await import(String('./mermaid.js'));
+    await renderMermaid().catch(console.error);
   }
 }
 

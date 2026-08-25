@@ -4,7 +4,7 @@
   "description": "Wiki UI assets and client-side bundle",
   "module": "dist/wiki.js",
   "scripts": {
-    "build": "rm -rf dist && bun build src/wiki.ts --outdir dist --target browser --format esm --splitting --minify",
+    "build": "rm -rf dist && bun build src/mermaid.ts --outdir dist --target browser --format esm --minify && bun build src/wiki.ts --outdir dist --target browser --format esm --external './mermaid.js' --external './mermaid' --external 'mermaid' --minify",
     "test": "bun test",
     "check": "bun x tsc --noEmit && bun test"
   },
