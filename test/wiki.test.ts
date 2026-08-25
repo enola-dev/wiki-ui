@@ -7,13 +7,13 @@ describe("wiki-ui bundle", () => {
   const wikiJsPath = join(distDir, "wiki.js");
   const wikiCssPath = join(distDir, "wiki.css");
 
-  test("dist/wiki.js exists and is an ES module", () => {
+  test("dist/wiki.js exists and dynamically imports mermaid", () => {
     expect(existsSync(wikiJsPath)).toBe(true);
     const content = readFileSync(wikiJsPath, "utf-8");
     expect(content.length).toBeGreaterThan(1000);
     expect(content).toContain("highlightAll");
-    expect(content).toContain("mermaid");
     expect(content).toContain(".mermaid");
+    expect(content).toContain("import(");
     expect(content).toContain("export");
   });
 
