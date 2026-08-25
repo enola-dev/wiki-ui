@@ -5,23 +5,39 @@ import { join } from "path";
 describe("wiki-ui bundle", () => {
   const distDir = join(import.meta.dir, "../dist");
   const wikiJsPath = join(distDir, "wiki.js");
+  const codeJsPath = join(distDir, "code.js");
   const mermaidJsPath = join(distDir, "mermaid.js");
   const wikiCssPath = join(distDir, "wiki.css");
 
-  test("dist contains exactly 3 consolidated files", () => {
+  test("dist contains exactly 4 consolidated files", () => {
     const files = readdirSync(distDir).sort();
-    expect(files).toEqual(["mermaid.js", "wiki.css", "wiki.js"]);
+    expect(files).toEqual(["code.js", "mermaid.js", "wiki.css", "wiki.js"]);
   });
 
-  test("dist/wiki.js exists and dynamically imports ./mermaid.js", () => {
+  test("dist/wiki.js is ultra-minimal and dynamically imports ./code.js and ./mermaid.js", () => {
     expect(existsSync(wikiJsPath)).toBe(true);
     const content = readFileSync(wikiJsPath, "utf-8");
-    expect(content.length).toBeGreaterThan(1000);
-    expect(content).toContain("highlightAll");
+    // Ultra-light core: must be small (< 1500 bytes)
+    expect(content.length).toBeLessThan(1500);
+    expect(content).toContain("pre code");
     expect(content).toContain(".mermaid");
-    expect(content).toContain("import(");
+    expect(content).toContain("./code.js");
     expect(content).toContain("./mermaid.js");
     expect(content).toContain("export");
+  });
+
+  test("dist/code.js contains curated syntax highlighter and languages", () => {
+    expect(existsSync(codeJsPath)).toBe(true);
+    const content = readFileSync(codeJsPath, "utf-8");
+    // Curated bundle: ~80-120 KB (not 1 MB)
+    expect(content.length).toBeGreaterThan(50000);
+    expect(content.length).toBeLessThan(150000);
+    expect(content).toContain("highlightCode");
+    expect(content).toContain("typescript");
+    expect(content).toContain("nix");
+    expect(content).toContain("kotlin");
+    expect(content).toContain("rust");
+    expect(content).toContain("python");
   });
 
   test("dist/mermaid.js exists and contains Mermaid renderer", () => {
@@ -64,6 +80,16 @@ describe("wiki-ui demo fixtures", () => {
     expect(content).not.toContain('class="mermaid"');
     expect(content).toContain('class="language-typescript"');
   });
+
+  test("demo/prose.html exists and excludes code and mermaid elements", () => {
+    const prosePath = join(demoDir, "prose.html");
+    expect(existsSync(prosePath)).toBe(true);
+    const content = readFileSync(prosePath, "utf-8");
+    expect(content).toContain('class="header-actions"');
+    expect(content).toContain('class="breadcrumbs"');
+    expect(content).not.toContain('class="mermaid"');
+    expect(content).not.toContain('<pre');
+  });
 });
 
 describe("wiki-ui demo server", () => {
@@ -84,6 +110,11 @@ describe("wiki-ui demo server", () => {
       const noMermaidText = await noMermaidRes.text();
       expect(noMermaidText).toContain("Without Mermaid");
 
+      const proseRes = await fetch(`${baseUrl}/prose`);
+      expect(proseRes.status).toBe(200);
+      const proseText = await proseRes.text();
+      expect(proseText).toContain("Pure Prose");
+
       const cssRes = await fetch(`${baseUrl}/wiki.css`);
       expect(cssRes.status).toBe(200);
       expect(cssRes.headers.get("content-type")).toContain("text/css");
@@ -91,6 +122,10 @@ describe("wiki-ui demo server", () => {
       const jsRes = await fetch(`${baseUrl}/wiki.js`);
       expect(jsRes.status).toBe(200);
       expect(jsRes.headers.get("content-type")).toContain("application/javascript");
+
+      const codeRes = await fetch(`${baseUrl}/code.js`);
+      expect(codeRes.status).toBe(200);
+      expect(codeRes.headers.get("content-type")).toContain("application/javascript");
 
       const mermaidRes = await fetch(`${baseUrl}/mermaid.js`);
       expect(mermaidRes.status).toBe(200);
@@ -116,6 +151,10 @@ describe("wiki-ui demo server", () => {
       const jsRes = await fetch(`${baseUrl}/wiki.js`);
       expect(jsRes.status).toBe(200);
       expect(jsRes.headers.get("content-type")).toContain("application/javascript");
+
+      const codeRes = await fetch(`${baseUrl}/code.js`);
+      expect(codeRes.status).toBe(200);
+      expect(codeRes.headers.get("content-type")).toContain("application/javascript");
 
       const mermaidRes = await fetch(`${baseUrl}/mermaid.js`);
       expect(mermaidRes.status).toBe(200);

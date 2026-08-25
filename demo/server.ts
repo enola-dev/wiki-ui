@@ -8,7 +8,27 @@ async function getDevJs(): Promise<string> {
     entrypoints: [join(rootDir, 'src/wiki.ts')],
     target: 'browser',
     format: 'esm',
-    external: ['./mermaid.js', './mermaid', 'mermaid'],
+    external: ['./mermaid.js', './mermaid', 'mermaid', './code.js', './code', 'code'],
+  });
+  const jsOutput = build.outputs.find(o => o.path.endsWith('.js'));
+  return jsOutput ? await jsOutput.text() : '';
+}
+
+async function getDevCodeJs(): Promise<string> {
+  const build = await Bun.build({
+    entrypoints: [join(rootDir, 'src/code.ts')],
+    target: 'browser',
+    format: 'esm',
+  });
+  const jsOutput = build.outputs.find(o => o.path.endsWith('.js'));
+  return jsOutput ? await jsOutput.text() : '';
+}
+
+async function getDevMermaidJs(): Promise<string> {
+  const build = await Bun.build({
+    entrypoints: [join(rootDir, 'src/mermaid.ts')],
+    target: 'browser',
+    format: 'esm',
   });
   const jsOutput = build.outputs.find(o => o.path.endsWith('.js'));
   return jsOutput ? await jsOutput.text() : '';
@@ -21,16 +41,6 @@ async function getDevCss(): Promise<string> {
   const wikiCss = existsSync(wikiCssPath) ? readFileSync(wikiCssPath, 'utf-8') : '';
   const hljsCss = existsSync(hljsCssPath) ? readFileSync(hljsCssPath, 'utf-8') : '';
   return `${wikiCss}\n${hljsCss}`;
-}
-
-async function getDevMermaidJs(): Promise<string> {
-  const build = await Bun.build({
-    entrypoints: [join(rootDir, 'src/mermaid.ts')],
-    target: 'browser',
-    format: 'esm',
-  });
-  const jsOutput = build.outputs.find(o => o.path.endsWith('.js'));
-  return jsOutput ? await jsOutput.text() : '';
 }
 
 export function createDemoServer(options: { port?: number; isPreview?: boolean } = {}) {
@@ -48,6 +58,8 @@ export function createDemoServer(options: { port?: number; isPreview?: boolean }
         pathname = '/demo/index.html';
       } else if (pathname === '/no-mermaid' || pathname === '/no-mermaid.html') {
         pathname = '/demo/no-mermaid.html';
+      } else if (pathname === '/prose' || pathname === '/prose.html') {
+        pathname = '/demo/prose.html';
       }
 
       if (pathname === '/wiki.css') {
@@ -76,6 +88,22 @@ export function createDemoServer(options: { port?: number; isPreview?: boolean }
           return new Response(file, { headers: { 'Content-Type': 'application/javascript' } });
         }
         return new Response(await getDevJs(), {
+          headers: { 'Content-Type': 'application/javascript' },
+        });
+      }
+
+      if (pathname === '/code.js') {
+        if (isPreview) {
+          const file = Bun.file(join(rootDir, 'dist/code.js'));
+          if (!(await file.exists())) {
+            return new Response('// dist/code.js not found. Run "bun run build" first.', {
+              status: 404,
+              headers: { 'Content-Type': 'application/javascript' },
+            });
+          }
+          return new Response(file, { headers: { 'Content-Type': 'application/javascript' } });
+        }
+        return new Response(await getDevCodeJs(), {
           headers: { 'Content-Type': 'application/javascript' },
         });
       }

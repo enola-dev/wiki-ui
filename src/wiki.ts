@@ -1,16 +1,32 @@
-import hljs from 'highlight.js';
 import './wiki.css';
 import 'highlight.js/styles/github.css';
 
 // TODO: Package as an embeddable Web Component (e.g. <wiki ...>) and modern ES module for embedding by other web apps.
 
-export async function init() {
-  hljs.highlightAll();
+export async function init(): Promise<void> {
+  if (typeof document === 'undefined') return;
 
-  if (typeof document !== 'undefined' && document.querySelector('pre.mermaid')) {
-    const { renderMermaid } = await import(String('./mermaid.js'));
-    await renderMermaid().catch(console.error);
+  const tasks: Promise<void>[] = [];
+
+  if (document.querySelector('pre code')) {
+    tasks.push(
+      (async () => {
+        const { highlightCode } = await import(String('./code.js'));
+        await highlightCode().catch(console.error);
+      })(),
+    );
   }
+
+  if (document.querySelector('pre.mermaid')) {
+    tasks.push(
+      (async () => {
+        const { renderMermaid } = await import(String('./mermaid.js'));
+        await renderMermaid().catch(console.error);
+      })(),
+    );
+  }
+
+  await Promise.all(tasks);
 }
 
 if (typeof document !== 'undefined') {
