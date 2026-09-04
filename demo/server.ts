@@ -34,13 +34,26 @@ async function getDevMermaidJs(): Promise<string> {
   return jsOutput ? await jsOutput.text() : '';
 }
 
+function getHljsThemeCss(): string {
+  const hljsLightPath = join(rootDir, 'node_modules/highlight.js/styles/github.css');
+  const hljsDarkPath = join(rootDir, 'node_modules/highlight.js/styles/github-dark.css');
+
+  const hljsLightCss = existsSync(hljsLightPath) ? readFileSync(hljsLightPath, 'utf-8') : '';
+  const hljsDarkCss = existsSync(hljsDarkPath) ? readFileSync(hljsDarkPath, 'utf-8') : '';
+
+  return [
+    hljsLightCss && `@media (prefers-color-scheme: light) {\n${hljsLightCss}\n}`,
+    hljsDarkCss && `@media (prefers-color-scheme: dark) {\n${hljsDarkCss}\n}`,
+  ]
+    .filter(Boolean)
+    .join('\n');
+}
+
 async function getDevCss(): Promise<string> {
   const wikiCssPath = join(rootDir, 'src/wiki.css');
-  const hljsCssPath = join(rootDir, 'node_modules/highlight.js/styles/github.css');
 
   const wikiCss = existsSync(wikiCssPath) ? readFileSync(wikiCssPath, 'utf-8') : '';
-  const hljsCss = existsSync(hljsCssPath) ? readFileSync(hljsCssPath, 'utf-8') : '';
-  return `${wikiCss}\n${hljsCss}`;
+  return `${wikiCss}\n${getHljsThemeCss()}`;
 }
 
 export function createDemoServer(options: { port?: number; isPreview?: boolean } = {}) {
