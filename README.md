@@ -1,6 +1,6 @@
 # Wiki UI
 
-This is the CSS + TS source code for the client-side UI assets of the [Wiki](../wiki)<!-- TODO and its API (as OpenAPI spec)-->.
+This is the CSS + TS source code for the client-side UI assets of the [Wiki](https://wiki.enola.dev)<!-- TODO and its API (as OpenAPI spec)-->.
 
 ## Distribution Assets & Architecture
 
