@@ -1,5 +1,5 @@
 import './wiki.css';
-import 'highlight.js/styles/github.css';
+import './hljs-theme.css';
 
 // TODO: Package as an embeddable Web Component (e.g. <wiki ...>) and modern ES module for embedding by other web apps.
 
